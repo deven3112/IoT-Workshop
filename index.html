@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHT Readings</title>
+    <style>
+        body {
+            background-color: #F0F0F0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .data-head {
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            padding: 20px;
+            background-color: #FFFFFF;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+        }
+        .data-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 80%;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #FFFFFF;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+        }
+        .data-item {
+            text-align: center;
+            flex: 1;
+            margin: 0 10px;
+        }
+        .data-item h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .data-item p {
+            font-size: 48px;
+            font-weight: bold;
+            color: #007BFF;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="data-head">DHT Sensor Realtime Readings</div>
+    <div class="data-container">
+        <div class="data-item">
+            <h2>Temperature</h2>
+            <p class="value" id="temperature">22 &#8451;</p>
+        </div>
+        <div class="data-item">
+            <h2>Humidity</h2>
+            <p class="value" id="humidity">10%</p>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.20.0/firebase-database.js"></script>
+    <script type="module">
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "fir-database-connection-343f0.firebaseapp.com",
+            databaseURL: "https://fir-database-connection-343f0-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "fir-database-connection-343f0",
+            storageBucket: "fir-database-connection-343f0.appspot.com",
+            messagingSenderId: "252315881961",
+            appId: "1:252315881961:web:15f2a5550e286320aa7b78"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Reference to the humidity and temperature data in Firebase
+        const humidityRef = database.ref('DHT_11/Humidity');
+        const temperatureRef = database.ref('DHT_11/Temperature');
+
+        // Update humidity value
+        humidityRef.on('value', (snapshot) => {
+            const humidity = snapshot.val();
+            document.getElementById('humidity').textContent = `${humidity}%`;
+        });
+
+        // Update temperature value
+        temperatureRef.on('value', (snapshot) => {
+            const temperature = snapshot.val();
+            document.getElementById('temperature').innerHTML = `${temperature}&#8451;`;
+        });
+    </script>
+</body>
+</html>
